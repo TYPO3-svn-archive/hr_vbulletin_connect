@@ -27,7 +27,6 @@
   
  */
 
-
     
 // store the get vars and unset the arrays for vBulletin, because some parameter are the same
 // and vBulletin modify some Parameter or delete it. Specially the parameter "forgot"
@@ -43,9 +42,12 @@ $_GET = array();
 $GLOBALS['HTTP_POST_VARS'] = array();
 $_POST = array();
      
+// This is a hack need for vBulletin 4.x  @see includes/init.php line 623
+$_POST['hrvbulletindummy'] = "";
      
 error_log(__FILE__." wird eigebunden: currentDir = \"".getcwd());
-
+//t3lib_div::devLog(__FILE__." wird eigebunden: currentDir = \"".getcwd(), 'hr_vbulletin_connect', 2 );
+ 
 
 //    $cookies = "";
 //    foreach($_COOKIE as $key => $value){
