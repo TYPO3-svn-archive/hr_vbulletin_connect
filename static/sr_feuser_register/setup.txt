@@ -4,3 +4,25 @@
 
 includeLibs.vbulletin_sr_feuser_register = EXT:hr_vbulletin_connect/user_vBulletin_global.php
 
+# see class.tx_srfeuserregister_sync.php
+plugin.tx_srfeuserregister_pi1 {
+     create {
+		evalValues {
+			username = uniqueLocal, atLeast[{$plugin.tx_srfeuserregister_pi1.usernameAtLeast}], atMost[{$plugin.tx_srfeuserregister_pi1.usernameAtMost}],hook
+                        password = twice, atLeast[{$plugin.tx_srfeuserregister_pi1.passwordAtLeast}], atMost[{$plugin.tx_srfeuserregister_pi1.passwordAtMost}],hook			
+                        email = email,atMost[255],uniqueLocal,hook
+			www = wwwURL,hook
+		}
+      }
+      edit {
+		evalValues {
+			username = unsetEmpty,hook
+                        password = twice, atLeast[{$plugin.tx_srfeuserregister_pi1.passwordAtLeast}], atMost[{$plugin.tx_srfeuserregister_pi1.passwordAtMost}],hook			 			
+                        email = email,atMost[255],uniqueLocal,hook
+			www = wwwURL,hook
+		}
+      }
+     
+
+}
+

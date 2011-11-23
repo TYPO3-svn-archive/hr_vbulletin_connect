@@ -109,4 +109,5 @@ $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['sr_feuser_register']['tx_srfeuserregiste
 
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['sr_feuser_register']['tx_srfeuserregister_pi1']['registrationProcess'][] = 'EXT:hr_vbulletin_connect/class.tx_srfeuserregister_sync.php:&tx_srfeuserregister_sync';
 
+$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['sr_feuser_register']['tx_srfeuserregister_pi1']['model'][] = 'EXT:hr_vbulletin_connect/class.tx_srfeuserregister_sync.php:&tx_srfeuserregister_sync';
 ?>

@@ -41,7 +41,9 @@
          
         // Constructor:
         function tx_srfeuserregister_sync() {
-            ///////////////////////////////////////////////////////////////
+           t3lib_div::devLog(__FILE__." ".__LINE__ , 'hr_vbulletin_connect', 2 );
+ 
+           ///////////////////////////////////////////////////////////////
             // invoke vBulletin:
             $this->vBulletin_sync = t3lib_div::makeInstance('user_feuser_vbulletinuser_sync');
             ///////////////////////////////////////////////////////////////////////
@@ -55,6 +57,8 @@
 //             print($controlDataObj->getCmd());
 //             print($controlDataObj->getCmdKey() );
 //             print($controlDataObj->getMode() );
+            //$controlDataObj->failure = "username,password";
+            
             if($controlDataObj->getMode() == MODE_NORMAL){
                 return;
             }
@@ -188,7 +192,75 @@
              
              
         }
-    }
+    
+        /** Check the data against vBulletin
+         *
+         * @param type $theTable
+         * @param type $dataArray     the fields of the form
+         * @param type $origArray     userrecord, if the cmdKey is "edit" or an empty array if the cmdKey is "create"
+         * @param type $markContentArray
+         * @param type $cmdKey
+         * @param type $requiredArray
+         * @param type $theField      name of the table field
+         * @param type $cmdParts
+         * @param type $invokingObj   tx_srfeuserregister_data
+         * @return string   if no error it return '', and in case of an error, the $theField 
+         */
+        function evalValues($theTable, $dataArray, $origArray, $markContentArray, $cmdKey, $requiredArray, $theField, $cmdParts, &$invokingObj) {
+                
+                /* if the user already exists, set the existing vbulletin user for the datamanager 
+                 */
+                if (is_array($origArray) && key_exists('tx_hrvbulletinconnect_vbulletin_user_id', $origArray)) {
+                        $vb_user = fetch_userinfo($origArray['tx_hrvbulletinconnect_vbulletin_user_id']);
+                        if (is_array($vb_user)) {
+                                $this->vBulletin_sync->vBulletin_userdata->set_existing($vb_user);
+                        }
+                }
+                /*
+                  Let vBulletin verify the values if set:
+                 */
+
+                if ($theField === 'username') {
+                        if (!$this->vBulletin_sync->vBulletin_userdata->verify_username($dataArray[$theField])) {
+                                foreach ($this->vBulletin_sync->vBulletin_userdata->errors as $key => $value) {
+                                        $errormsg .= "vBulletin: $value <br>";
+                                }
+                                $invokingObj->inError[$theField] = TRUE;
+                                $invokingObj->failureMsg[$theField][] = $errormsg;
+                                return $theField;
+                        }
+                } else if ($theField === 'email') {
+                        if (!$this->vBulletin_sync->vBulletin_userdata->verify_useremail($dataArray[$theField])) {
+                                foreach ($this->vBulletin_sync->vBulletin_userdata->errors as $key => $value) {
+                                        $errormsg .= "vBulletin: $value <br>";
+                                }
+                                $invokingObj->inError[$theField] = TRUE;
+                                $invokingObj->failureMsg[$theField][] = $errormsg;
+                                return $theField;
+                        }
+                } else if ($theField === 'www') {
+                        if (!$this->vBulletin_sync->vBulletin_userdata->verify_homepage($dataArray[$theField])) {
+                                foreach ($this->vBulletin_sync->vBulletin_userdata->errors as $key => $value) {
+                                        $errormsg .= "vBulletin: $value <br>";
+                                }
+                                $invokingObj->inError[$theField] = TRUE;
+                                $invokingObj->failureMsg[$theField][] = $errormsg;
+                                return $theField;
+                        }
+                } else if ($theField === 'password') {
+                        if (!$this->vBulletin_sync->vBulletin_userdata->verify_password($dataArray[$theField])) {
+                                foreach ($this->vBulletin_sync->vBulletin_userdata->errors as $key => $value) {
+                                        $errormsg .= "vBulletin: $value <br>";
+                                }
+                                $invokingObj->inError[$theField] = TRUE;
+                                $invokingObj->failureMsg[$theField][] = $errormsg;
+                                return $theField;
+                        }
+                }
+                return '';
+        }
+
+}
      
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/hr_vbulletin_connect/class.tx_srfeuserregister_sync.php']) {
     include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/hr_vbulletin_connect/class.tx_srfeuserregister_sync.php']);
