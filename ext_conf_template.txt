@@ -1,0 +1,62 @@
+
+# cat=basic; type=string; label=Forum directory: Directory where vBulletin forum files are located. f.e.: "forums", "/home/herbert/htdocs/typo3site/forums",  "/home/herbert/htdocs/forums", "../forums",
+forumDir  = forums
+
+# cat=basic; type=int; label=FE Groups for vB group id=1:  Unregistered / Not Logged In vB users (group id=1).
+vB1feGroupsid  = 
+
+# cat=basic; type=int; label=FE Groups for vB group id=2: The above for Registered vB users (group id=2).
+vB2feGroupsid  = 1
+
+# cat=basic; type=int; label=FE Groups for vB group id=3: ... for Awaiting Email Confirmation vB users (group id=3).
+vB3feGroupsid  = 
+
+# cat=basic; type=int; label=FE Groups for vB group id=4: ... for Awaiting Moderation (COPPA) vB users (group id=4).
+vB4feGroupsid  = 
+
+# cat=basic; type=int; label=FE Groups for vB group id=5: ... for vB Super Moderators (group id=5).
+vB5feGroupsid  = 1
+
+# cat=basic; type=int; label=FE Groups for vB group id=6: ... for vB Administrators (group id=6).
+vB6feGroupsid  = 1
+
+# cat=basic; type=int; label=FE Groups for vB group id=7: ... for vB Moderators (group id=7).
+vB7feGroupsid  = 1
+
+# cat=basic; type=int; label=FE Groups for vB group id=8: ... for vB users from custom group id=8 (Banned).
+vB8feGroupsid  = 
+
+# cat=basic; type=int; label=FE Groups for vB group id=9: ... for vB users from custom group id=9.
+vB9feGroupsid  = 
+
+# cat=basic; type=int; label=FE Groups for vB group id=10: ... for vB users from custom group id=10.
+vB10feGroupsid  = 
+
+# cat=basic; type=int; label=FE Groups for vB group id=11: ... for vB users from custom group id=10.
+vB11feGroupsid  = 
+
+# cat=basic; type=int; label=FE Groups for vB group id=12: ... for vB users from custom group id=10.
+vB12feGroupsid  = 
+
+# cat=basic; type=int; label=FE Groups for vB group id=13: ... for vB users from custom group id=10.
+vB13feGroupsid  = 
+
+# cat=basic; type=int; label=FE Groups for vB group id=14: ... for vB users from custom group id=10.
+vB14feGroupsid  = 
+
+# cat=basic; type=int; label=FE Groups for vB group id=15: ... for vB users from custom group id=10.
+vB15feGroupsid  = 
+
+
+# cat=basic; type=string; label=Url to of the forum: to check the referer. If the referer match, typo3 try to login the vbulletin user if any. For example:  http://eagle.intervis.org/vbulletin/
+vBurl  = 
+
+# cat=basic; type=string; label=Isocode (2 Letters): isocode of the default Languge of the typo3 site. For Example "en". The extension try to determine the vBulletin language, and try to set the same language for TYPO3. If the same language doesn't exists in TYPO3 this default language is set.
+typo3_default_lang = en
+
+# cat=basic; type=int[0-999999999]; label=page id with fe_users: page id where fe_users are stored
+fe_users_store_pid  = 0
+
+# cat=basic; type=int[1-999999999]; label=vB group if a TYPO3 user is disabled: Set the vBulletin group if the diable flag is set for a TYPO3 user. The value should be 1 for unregistred users or 3 for Awaiting email confirmation.
+vb_group_for_disable  = 1
+

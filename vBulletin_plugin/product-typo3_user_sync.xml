@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<product productid="typo3_user_sync" active="1">
+	<title>Typo3 user sync</title>
+	<description>Sync the Typo3-fe_users with the vb-user</description>
+	<version>0.0.1</version>
+	<url />
+	<versioncheckurl />
+	<dependencies>
+	</dependencies>
+	<codes>
+	</codes>
+	<templates>
+	</templates>
+	<plugins>
+		<plugin active="1" executionorder="5">
+			<title>redirect to the TYPO3 register page</title>
+			<hookname>register_start</hookname>
+			<phpcode><![CDATA[if (!defined ('TYPO3_MODE')){
+require_once("includes/update_typo3_user_hook.php");
+
+call_typo3_register_page();
+
+}]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="5">
+			<title>Reset password</title>
+			<hookname>reset_password</hookname>
+			<phpcode><![CDATA[if (!defined ('TYPO3_MODE')){
+  require_once("includes/update_typo3_user_hook.php");
+$error = array();    
+$typo3_return_value = userdata_reset_password($userinfo['userid'], $newpassword, $error);
+
+}]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="5">
+			<title>Avoid to create new Users in the admin interface</title>
+			<hookname>useradmin_edit_start</hookname>
+			<phpcode><![CDATA[if ( $_REQUEST['do'] == 'add')
+{
+//echo "useradmin_edit_start";
+DEVDEBUG('useradmin_edit_start: request = add');
+print_stop_message('add_new_user_is_not_allowed');
+
+}]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="5">
+			<title>Delete the TYPO3 user</title>
+			<hookname>userdata_delete</hookname>
+			<phpcode><![CDATA[if (!defined ('TYPO3_MODE')){
+    require_once("includes/update_typo3_user_hook.php");
+   userdata_delete($this->existing['userid']);
+}]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="5">
+			<title>Save the TYPO3 user</title>
+			<hookname>userdata_postsave</hookname>
+			<phpcode><![CDATA[//global $vbulletin;
+//print_r($_POST);
+//echo //"newpassword_md5=".$vbulletin->GPC['newpassword_md5'];
+// echo //"newpassword=".$vbulletin->GPC['newpassword'];
+if (!defined ('TYPO3_MODE')){
+require_once("includes/update_typo3_user_hook.php");
+    userdata_postsave($userid);
+}]]></phpcode>
+		</plugin>
+		<plugin active="1" executionorder="5">
+			<title>Validate the TYPO3 user</title>
+			<hookname>userdata_presave</hookname>
+			<phpcode><![CDATA[if (!defined ('TYPO3_MODE')){
+require_once("includes/update_typo3_user_hook.php");
+
+
+$typo3_error = array();
+$typo3_return_value = userdata_verify($this->fetch_field('userid'), $this->user, $typo3_error);
+
+if(! $typo3_return_value){
+//error_log(__LINE__.", ".__FILE__." Fehler in validate (userdatqa_presave) gefunden: ".$typo3_error[0]." return_value=".$typo3_return_value);
+$this->error($typo3_error[0]);
+$return_value = false;
+}
+}]]></phpcode>
+		</plugin>
+	</plugins>
+	<phrases>
+		<phrasetype name="Fehlermeldungen" fieldname="error">
+			<phrase name="add_new_user_is_not_allowed" date="1178002943" username="admin" version="0.0.1"><![CDATA[create new users is not allowed in vBulletin because of the TYPO3  extension hr_vbulletin_connect. If you want to create new user go to the typo3 backend. Only edit of users is allowed in vBulletin.]]></phrase>
+			<phrase name="auth_failed" date="1169979351" username="admin" version="0.0.1"><![CDATA[Authentication failed.]]></phrase>
+			<phrase name="cannot_delete_typo3_user" date="1169979953" username="admin" version="0.0.1"><![CDATA[cannot delete TYPO3 user]]></phrase>
+			<phrase name="cannot_import_vBulletin_user_because_a_equivalent_typo3_user_already_exists" date="1169981559" username="admin" version="0.0.1"><![CDATA[Cannot import vbulletin user because a equivalnt TYPO3 user already exists.]]></phrase>
+			<phrase name="cannot_update_typo3_user" date="1169979869" username="admin" version="0.0.1"><![CDATA[cannot update TYPO3 user]]></phrase>
+			<phrase name="cannot_verify_the_typo3_user_because_database_error" date="1169981459" username="admin" version="0.0.1"><![CDATA[System error: cannot verify the TYPO3 user because of a database error.]]></phrase>
+			<phrase name="command_is_not_valid" date="1169980953" username="admin" version="0.0.1"><![CDATA[System error: Command is not valid.]]></phrase>
+			<phrase name="database_error_at_verify_typo3_user" date="1169981264" username="admin" version="0.0.1"><![CDATA[System error: database error at verify the TYPO3 user.]]></phrase>
+			<phrase name="import_a_vBulletin_user_fails" date="1169981649" username="admin" version="0.0.1"><![CDATA[System error: Import of the vbulletin user fails because of a database error.]]></phrase>
+			<phrase name="no_vbulletin_userid_in_parameters" date="1169979231" username="admin" version="0.0.1"><![CDATA[There is no userid in the parameters. This is a system error.]]></phrase>
+			<phrase name="not_allowed_character_found_in_username" date="1169981179" username="admin" version="0.0.1"><![CDATA[Not allowed character found in username.]]></phrase>
+			<phrase name="username_already_exists_in_typo3" date="1169981305" username="admin" version="0.0.1"><![CDATA[Username already exists in TYPO3.]]></phrase>
+			<phrase name="vbulletin_user_is_not_valid_for_typo3" date="1169980891" username="admin" version="0.0.1"><![CDATA[Some data are not valid for TYPO3. Maybe username already exists.]]></phrase>
+			<phrase name="vbuser_is_not_an_array" date="1169981056" username="admin" version="0.0.1"><![CDATA[System error: vbuser is not an array]]></phrase>
+			<phrase name="vbuser_userid_is_not_set" date="1169981125" username="admin" version="0.0.1"><![CDATA[System error: vbuser userid is not set]]></phrase>
+			<phrase name="want_update_the_typo3_user_but_no_equivalent_vbulletin_user_found" date="1169979744" username="admin" version="0.0.1"><![CDATA[want update the TYPO3 user but no equivalent vbulletin user found.]]></phrase>
+		</phrasetype>
+	</phrases>
+	<options>
+	</options>
+	<helptopics>
+	</helptopics>
+	<cronentries>
+	</cronentries>
+	<faqentries>
+	</faqentries>
+</product>

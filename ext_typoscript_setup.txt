@@ -1,0 +1,41 @@
+ 
+#######################################################
+# Eine Speziell konfigurierte Seite mit typwNum 450 wird von vBulletin hook aufgerufen
+# um Typo3 dazu veranlassen die Daten von der vBulletin usertabelle auszulesen und in die fe_users tabelle
+# zu schreiben.
+# 
+includeLibs.user_vbulletinuser_feuser_sync = EXT:hr_vbulletin_connect/class.user_vbulletinuser_feuser_sync.php
+
+plugin.tx_user_vbulletinuser_feuser_sync >
+plugin.tx_user_vbulletinuser_feuser_sync= USER_INT
+plugin.tx_user_vbulletinuser_feuser_sync {
+      userFunc = user_vbulletinuser_feuser_sync->init
+}
+vbulletin_sync = PAGE
+vbulletin_sync {
+   typeNum = 450
+   10 < plugin.tx_user_vbulletinuser_feuser_sync
+
+    config {
+        disableAllHeaderCode = 1
+        #additionalHeaders = Content-type:application/xml
+        #xhtml_cleaning = 0
+        admPanel = 0
+        debug=0
+    }
+}
+
+##################################################
+# This handle the language check and the login parameters when a user comes from vBulletin site.
+#
+includeLibs.tx_hrvbulletinconnect_pi1 = EXT:hr_vbulletin_connect/pi1/class.tx_hrvbulletinconnect_pi1.php
+
+
+plugin.tx_hrvbulletinconnect_pi1 = USER_INT
+plugin.tx_hrvbulletinconnect_pi1.userFunc = tx_hrvbulletinconnect_pi1->main
+plugin.tx_hrvbulletinconnect_pi1.templateFile=EXT:hr_vbulletin_connect/pi1/redirect_page.tmpl
+
+page.1034 < plugin.tx_hrvbulletinconnect_pi1
+
+
+

@@ -1,0 +1,6 @@
+# This is requiered for TYPO3 version 4.1.x because of a errormessage on the
+# user edit page.
+# Das sollte nur auf der editierseite eingebunden werden!! Wegen Performance und sonstigen Problemen.
+
+includeLibs.vbulletin_sr_feuser_register = EXT:hr_vbulletin_connect/user_vBulletin_global.php
+

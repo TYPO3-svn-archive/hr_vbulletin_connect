@@ -1,0 +1,5 @@
+plugin.feadmin.fe_users {
+  file.templateFile = EXT:hr_vbulletin_connect/res/fe_admin_fe_users.tmpl 
+
+}
+ 

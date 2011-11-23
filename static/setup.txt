@@ -1,0 +1,35 @@
+# This is requiered for TYPO3 version 4.1.x because of a errormessage on the
+# user edit page.
+# Das sollte nur auf der editierseite eingebunden werden!! Wegen Performance und sonstigen Problemen.
+
+includeLibs.vbulletin_feAdmin_1 = EXT:hr_vbulletin_connect/user_vBulletin_global.php
+
+
+plugin.feadmin.fe_users { 
+  userFunc = user_vbulletin_feAdmin->init 
+  
+  includeLibs = EXT:hr_vbulletin_connect/class.user_vbulletin_feAdmin.php 
+ 
+  templateFile=EXT:hr_vbulletin_connect/res/fe_admin_fe_users.tmpl 
+  delete=1 
+  
+  # add the field "disable" which is set to 1 when a user register himself.
+  create.fields = username,password,name,email,usergroup,address,telephone,fax,title,company,zip,city,country,www,disable
+  
+  # Set disable to 1, if the user click the confirm link it will be changed to 0
+  create.overrideValues {
+    disable = 1
+  }
+
+  # If a user click on the confirm link in the email, change the disable from 1 to 0:
+  setfixed=1 
+  setfixed.approve { 
+    disable = 0 
+    #tstamp could makes troubles at older TYPO3 versions.
+    # if the confirm link in the email won't work, try to remove tstamp (4.2.0 should work).
+    _FIELDLIST = uid,pid,disable,tstamp
+  } 
+ 
+}
+
+
