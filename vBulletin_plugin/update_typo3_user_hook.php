@@ -32,9 +32,13 @@
 // Set here the base url to the typo3 site, without any filename such as index.php, but with a trailing slash:
 $GLOBALS['hr_vbulletin_connect_config'] = array(
      //'typo3_url' => "http://eagle.intervis.org/copadata_2/",
-     'typo3_url' => "http://192.168.1.167/copadata_2/",
+     'typo3_url' => "http://dev.tvet-portal.net/",
       // Set here the pid of the register page:
-     'typo3_register_pid' => 726,
+     'typo3_register_pid' => 26,
+     // Set here the pid of any page in your page tree, this page is called from vBulletin
+     // with  url parameter like: index.php?id=20&type=450
+     // this page must not be a shortcut.
+     'typo3_vbulletin_sync_pid' => 20,
 ); 
 //
 // end config
@@ -60,11 +64,12 @@ function call_typo3_site($command, $vBulletin_userid, $vbulletin_user, &$errors)
        //return false;
    }
    
-   // Do not change this value, change the value in the Config Section of the script ($hr_vbulletin_connect_typo3_url)!!
-   //$typo3_url = "http://eagle.intervis.org/dummy-4.0.1/index.php";
    $typo3_url = $GLOBALS['hr_vbulletin_connect_config']['typo3_url']."index.php";
      
    $typo3_url .= "?type=450&no_cache=1";
+   if(isset($GLOBALS['hr_vbulletin_connect_config']['typo3_vbulletin_sync_pid'])){
+           $typo3_url .= '&id='.$GLOBALS['hr_vbulletin_connect_config']['typo3_vbulletin_sync_pid'];
+   }
    
    
    //echo $typo3_url;
@@ -90,10 +95,17 @@ function call_typo3_site($command, $vBulletin_userid, $vbulletin_user, &$errors)
                 }
         }
     }
+    $sessionhash = $_COOKIE[$vbulletin->config['Misc']['cookieprefix'].'sessionhash'];
+    if(0 == strlen($sessionhash)){
+         $sessionhash = $_COOKIE[$vbulletin->config['Misc']['cookieprefix'].'_sessionhash'];   
+    }
+    
     $postdata.='cmd='.urlencode($command).'&';
     $postdata.='vbuserid='.urlencode($vBulletin_userid).'&';
-    $postdata.='sessionhash='.urlencode( $_COOKIE[$vbulletin->config['Misc']['cookieprefix'].'sessionhash']).'&';
-    //error_log(__LINE__.", ".__FILE__." postdata= $postdata");
+    $postdata.='sessionhash='.urlencode( $sessionhash).'&';
+//print("prefix=".$vbulletin->config['Misc']['cookieprefix']);
+    //print_r($_COOKIE);    
+//error_log(__LINE__.", ".__FILE__." postdata= $postdata");
     $safecode = md5($postdata.$admin['salt'].COOKIE_SALT.$admin['userid']);
     $postdata.='safecode='.urlencode($safecode);
     
