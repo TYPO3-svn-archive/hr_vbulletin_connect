@@ -138,7 +138,7 @@ class user_vbulletinuser_feuser_sync {
         if(strcmp($safecode, $safecode_1)){
             if(TYPO3_DLOG){
                 t3lib_div::devLog('checksum dont match: safecode_1 = '.$safecode_1.', '.$safecode.'  in '.__LINE__.": ".__FUNCTION__." file: ".__FILE__." postdata=".$postdata, $this->extKey, 2);
-                t3lib_div::devLog($postdata.$admin_vbuser['salt'].COOKIE_SALT.$admin_vbuser['userid'].'  in '.__LINE__.": ".__FUNCTION__." file: ".__FILE__, $this->extKey, 2);
+                //t3lib_div::devLog($postdata.$admin_vbuser['salt'].COOKIE_SALT.$admin_vbuser['userid'].'  in '.__LINE__.": ".__FUNCTION__." file: ".__FILE__, $this->extKey, 2);
                 
                 return $this->create_error_element("auth_failed");
             }
