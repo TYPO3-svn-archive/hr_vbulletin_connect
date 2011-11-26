@@ -104,9 +104,13 @@ function call_typo3_site($command, $vBulletin_userid, $vbulletin_user, &$errors)
     $postdata.='vbuserid='.urlencode($vBulletin_userid).'&';
     $postdata.='sessionhash='.urlencode( $sessionhash).'&';
 //print("prefix=".$vbulletin->config['Misc']['cookieprefix']);
-    //print_r($_COOKIE);    
 //error_log(__LINE__.", ".__FILE__." postdata= $postdata");
-    $safecode = md5($postdata.$admin['salt'].COOKIE_SALT.$admin['userid']);
+    $safecode = md5($postdata.COOKIE_SALT.$admin['userid']);
+    if($command === 'update'){
+        //print("\n postdata vbulletin: ".$postdata.COOKIE_SALT.$admin['userid']);    
+        //print("\n safecode vb: ".$safecode);
+        //print("\n");
+    }
     $postdata.='safecode='.urlencode($safecode);
     
     
@@ -198,12 +202,14 @@ function userdata_postsave($vBulletin_userid)
 
        return true;;
     }
+    //print_r($vbulletin->GPC);
+
     $vbulletin_user = array();
     /** Try to get the md5 password if not set:
     */
     if(! isset($vbulletin_user['md5_password'])){
     
-    //print_r($vbulletin->GPC);
+        //print_r($vbulletin->GPC);
         $md5_password = $vbulletin->GPC['newpassword_md5'] ? $vbulletin->GPC['newpassword_md5'] : $vbulletin->GPC['newpassword'];
         if(!$md5_password){
             $clear_password = $_POST['password'];
@@ -218,6 +224,7 @@ function userdata_postsave($vBulletin_userid)
         }
         $vbulletin_user['md5_password'] = $md5_password;
         //error_log(__LINE__.", ".__FILE__." md5_password = $md5_password");
+        //print("md5password=".$md5_password);
 
 
    }    
