@@ -3,7 +3,7 @@
 ########################################################################
 # Extension Manager/Repository config file for ext "hr_vbulletin_connect".
 #
-# Auto generated 26-11-2011 11:24
+# Auto generated 26-11-2011 11:26
 #
 # Manual updates:
 # Only the data in the array - everything else is removed by next
@@ -15,7 +15,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'description' => 'Sync vBulletin user and Typo3 fe_users. It allows Single sign on.',
 	'category' => 'misc',
 	'shy' => 0,
-	'version' => '1.4.0',
+	'version' => '1.4.1',
 	'dependencies' => '',
 	'conflicts' => '',
 	'priority' => '',
