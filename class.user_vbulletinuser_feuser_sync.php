@@ -132,9 +132,10 @@ class user_vbulletinuser_feuser_sync {
         $postdata.='cmd='.urlencode($command).'&';
         $postdata.='vbuserid='.urlencode($vBulletin_userid).'&';
         $postdata.='sessionhash='.$sessionhash.'&';
-        //error_log(__LINE__.", ".__FILE__." postdata_1= $postdata");
-
-        $safecode_1 = md5($postdata.$admin_vbuser['salt'].COOKIE_SALT.$admin_vbuser['userid']);
+        $safecode_1 = md5($postdata.COOKIE_SALT.$admin_vbuser['userid']);
+        //print("<!-- \n postdata TYPO3: ".$postdata.COOKIE_SALT.$admin_vbuser['userid']);
+        //print("\n safecode TYPO3:".$safecode_1);
+        //print("\n -->");
         if(strcmp($safecode, $safecode_1)){
             if(TYPO3_DLOG){
                 t3lib_div::devLog('checksum dont match: safecode_1 = '.$safecode_1.', '.$safecode.'  in '.__LINE__.": ".__FUNCTION__." file: ".__FILE__." postdata=".$postdata, $this->extKey, 2);
